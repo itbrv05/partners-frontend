@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Partners Mini App</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="logo">
+                <h1>🤝 Partners</h1>
+                <p>Ваш личный кабинет партнера</p>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main">
+        <div class="container">
+            <!-- User Profile Section -->
+            <section class="profile-section">
+                <div class="profile-card">
+                    <div class="profile-avatar">
+                        <div class="avatar-circle">
+                            <span id="userInitials">П</span>
+                        </div>
+                    </div>
+                    <div class="profile-info">
+                        <h2 id="userName">Партнер</h2>
+                        <p id="userPhone">+7 (999) 123-45-67</p>
+                        <p id="userEmail">partner@example.com</p>
+                    </div>
+                    <button class="edit-btn" onclick="editProfile()">
+                        ✏️ Редактировать
+                    </button>
+                </div>
+            </section>
+
+            <!-- Stats Section -->
+            <section class="stats-section">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon">💰</div>
+                        <div class="stat-info">
+                            <h3 id="balance">0 ₽</h3>
+                            <p>Баланс</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">📋</div>
+                        <div class="stat-info">
+                            <h3 id="totalLeads">0</h3>
+                            <p>Всего заявок</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">✅</div>
+                        <div class="stat-info">
+                            <h3 id="completedDeals">0</h3>
+                            <p>Завершенных</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">📈</div>
+                        <div class="stat-info">
+                            <h3 id="earnings">0 ₽</h3>
+                            <p>Заработано</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Actions Section -->
+            <section class="actions-section">
+                <h2>Действия</h2>
+                <div class="action-buttons">
+                    <button class="action-btn primary" onclick="createLead()">
+                        ➕ Создать заявку
+                    </button>
+                    <button class="action-btn secondary" onclick="viewLeads()">
+                        📋 Мои заявки
+                    </button>
+                    <button class="action-btn secondary" onclick="viewProfile()">
+                        👤 Профиль
+                    </button>
+                </div>
+            </section>
+
+            <!-- Recent Leads Section -->
+            <section class="leads-section">
+                <h2>Последние заявки</h2>
+                <div class="leads-list" id="leadsList">
+                    <div class="lead-item">
+                        <div class="lead-info">
+                            <h4>Заявка #001</h4>
+                            <p>Статус: В обработке</p>
+                            <span class="lead-date">24.10.2025</span>
+                        </div>
+                        <div class="lead-status processing">
+                            В работе
+                        </div>
+                    </div>
+                    <div class="lead-item">
+                        <div class="lead-info">
+                            <h4>Заявка #002</h4>
+                            <p>Статус: Завершена</p>
+                            <span class="lead-date">23.10.2025</span>
+                        </div>
+                        <div class="lead-status completed">
+                            ✅ Выиграна
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Profile Edit Modal -->
+    <div class="modal" id="profileModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Редактировать профиль</h3>
+                <button class="close-btn" onclick="closeModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="profileForm">
+                    <div class="form-group">
+                        <label for="firstName">Имя</label>
+                        <input type="text" id="firstName" name="firstName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="lastName">Фамилия</label>
+                        <input type="text" id="lastName" name="lastName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">Телефон</label>
+                        <input type="tel" id="phone" name="phone" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn-cancel" onclick="closeModal()">
+                            Отмена
+                        </button>
+                        <button type="submit" class="btn-save">
+                            Сохранить
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Lead Creation Modal -->
+    <div class="modal" id="leadModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Создать заявку</h3>
+                <button class="close-btn" onclick="closeLeadModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="leadForm">
+                    <div class="form-group">
+                        <label for="clientName">Имя клиента</label>
+                        <input type="text" id="clientName" name="clientName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="clientPhone">Телефон клиента</label>
+                        <input type="tel" id="clientPhone" name="clientPhone" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="service">Услуга</label>
+                        <select id="service" name="service" required>
+                            <option value="">Выберите услугу</option>
+                            <option value="consultation">Консультация</option>
+                            <option value="development">Разработка</option>
+                            <option value="support">Поддержка</option>
+                            <option value="other">Другое</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="description">Описание</label>
+                        <textarea id="description" name="description" rows="3"></textarea>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn-cancel" onclick="closeLeadModal()">
+                            Отмена
+                        </button>
+                        <button type="submit" class="btn-save">
+                            Создать заявку
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-spinner"></div>
+        <p>Загрузка...</p>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
